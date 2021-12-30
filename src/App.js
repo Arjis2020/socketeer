@@ -7,6 +7,11 @@ import Server from './components/Server';
 import Status from './components/Status';
 import Footer from './components/Footer';
 
+//socket
+import Socket from './socket'
+import { useState } from 'react';
+import { ConnectingAirports } from '@mui/icons-material';
+
 const theme = createTheme({
   palette: {
     mode: 'dark',
@@ -30,14 +35,45 @@ const styles = createStyles({
 })
 
 function App() {
+  const [connection, setConnection] = useState({
+    status: 'disconnected',
+    data: {
+      id: '',
+      url: '',
+      listeners: []
+    }
+  })
+
+  const onConnect = (url, options) => {
+    try {
+      setConnection({
+        status: 'connecting',
+        data: {
+          id: '',
+          url,
+          listeners: [{ name: 'connect', removable: false }]
+        }
+      })
+      Socket.init(url, options, (data) => {
+        setConnection({
+          status: 'connected',
+          data
+        })
+      })
+    }
+    catch (err) {
+      console.log(err.toString())
+    }
+  }
+
   return (
     <div style={styles.root}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Header />
-        <Connection />
+        <Connection onConnect={onConnect} listeners={connection.data.listeners} status={connection.status} />
         <Server messages={[{ title: 'prices-update', msg: JSON.stringify({ 'bitcoin': '151412', 'ethereum': '151412' }, undefined, 4) }]} />
-        <Status status='disconnected'/>
+        <Status status={connection.status} data={connection.data} />
         <Footer />
       </ThemeProvider>
     </div>

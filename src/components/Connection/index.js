@@ -2,10 +2,11 @@ import { Button, Container, FormControl, FormGroup, Grid, IconButton, InputLabel
 import React, { useState } from 'react'
 import PowerIcon from '@mui/icons-material/Power';
 import Listeners from './components/Listeners';
+import PowerOffIcon from '@mui/icons-material/PowerOff';
 
-export default function Connection() {
+export default function Connection({ onConnect, listeners, status }) {
     const [protocol, setProtocol] = useState('HTTP')
-    const [options, setOptions] = useState('{ \n\tforceNew: true, \n\tpath: "/socket.io" \n}')
+    const [options, setOptions] = useState('{ \n\t"forceNew": true, \n\t"path": "/socket.io" \n}')
     const [url, setUrl] = useState('localhost:3000')
 
     const handleProtocolChange = (e) => {
@@ -35,6 +36,13 @@ export default function Connection() {
 
     const validate = (value) => {
         return value.includes(':')
+    }
+
+    const replacer = (value) => {
+        value = value.replace(/[\n\t]/g, '');
+        value = value.replace(/ /g, '');
+        console.log(value)
+        return (value)
     }
 
     return (
@@ -81,12 +89,21 @@ export default function Connection() {
                     />
                     <Button
                         variant='contained'
-                        color='primary'
+                        color={status === 'disconnected' ? 'primary' : status === 'connecting' ? 'primary' : 'error'}
                         size='large'
-                        startIcon={<PowerIcon />}
+                        startIcon={
+                            status === 'disconnected' ?
+                                <PowerIcon /> :
+                                status === 'connecting' ?
+                                    <PowerIcon /> :
+                                    < PowerOffIcon />
+                        }
+                        onClick={() => onConnect(protocol.toLowerCase() + '://' + url.toLowerCase(), JSON.parse(replacer(options)))}
                     >
                         <Typography>
-                            Connect
+                            {status === 'disconnected' ? 'Connect' :
+                                status === 'connecting' ? 'Connecting' :
+                                    'Disconnect'}
                         </Typography>
                     </Button>
 
@@ -103,7 +120,7 @@ export default function Connection() {
                         size='small'
                         fullWidth
                     />
-                    <Listeners listeners={['prices-update', 'connect', 'disconnect', 'reject', 'disembark', 'teleport']} />
+                    <Listeners listeners={listeners} />
                 </Stack>
             </Stack>
         </Container>

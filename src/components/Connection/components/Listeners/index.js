@@ -8,42 +8,50 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 export default function Listeners({ listeners }) {
     const [openModal, setOpenModal] = useState(false)
     const [allListeners, setListeners] = useState(listeners)
-    
+    console.log(allListeners)
     return (
         <Container maxWidth='xl' disableGutters>
             <Heading heading={'Listeners'} body={'Declare what server emissions you would like to listen for'} icon={<HearingIcon />} button buttonText='Add' buttonIcon={<AddIcon />} onClick={() => {
                 setOpenModal(true)
             }} />
             <Stack height={168} overflow='hidden auto'>
-                {allListeners && allListeners.map(listener => {
-                    return (
-                        <Paper className='p-2 mb-2'>
-                            <Stack direction='row' justifyContent='space-between'>
-                                <Stack
-                                    spacing={2}
-                                    direction='row'
-                                    alignItems='center'
-                                >
-                                    <HearingIcon color='primary' />
-                                    <Typography>
-                                        {listener}
-                                    </Typography>
+                {listeners ?
+                    allListeners.map(listener => {
+                        return (
+                            <Paper className='p-2 mb-2'>
+                                <Stack direction='row' justifyContent='space-between'>
+                                    <Stack
+                                        spacing={2}
+                                        direction='row'
+                                        alignItems='center'
+                                    >
+                                        <HearingIcon color='primary' />
+                                        <Typography>
+                                            {listener.name}
+                                        </Typography>
+                                    </Stack>
+                                    <IconButton
+                                        color='error'
+                                        size='small'
+                                        onClick={() => {
+                                            setListeners(allListeners.filter(item => {
+                                                return item !== listener.name
+                                            }))
+                                        }}
+                                    >
+                                        <RemoveCircleOutlineIcon />
+                                    </IconButton>
                                 </Stack>
-                                <IconButton
-                                    color='error'
-                                    size='small'
-                                    onClick={() => {
-                                        setListeners(allListeners.filter(item => {
-                                            return item !== listener
-                                        }))
-                                    }}
-                                >
-                                    <RemoveCircleOutlineIcon />
-                                </IconButton>
-                            </Stack>
-                        </Paper>
-                    )
-                })}
+                            </Paper>
+                        )
+                    })
+                    :
+                    <Container>
+                        <Typography variant='caption' color='GrayText'>
+                            No listeners added
+                        </Typography>
+                    </Container>
+                }
             </Stack>
         </Container>
     )

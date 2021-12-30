@@ -3,6 +3,7 @@ import React from 'react'
 import './status.css'
 
 export default function Status({ status, data }) {
+    console.log(data)
     return (
         <div className={`status-container position-absolute start-0 end-0 bottom-0 ${status}`}>
             <Container maxWidth='xl'>
@@ -14,7 +15,7 @@ export default function Status({ status, data }) {
                         {status === 'disconnected' ? 'Not connected' : status === 'connecting' ? 'Connecting' : `Connected to ${data.url}`}
                     </Typography>
                     <Typography>
-                        Socket id : admancnawquhqdnadja
+                        {status === 'connected' ? `Socket id : ${data.id}` : null}
                     </Typography>
                 </Stack>
             </Container>
