@@ -1,0 +1,17 @@
+.status-container {
+    background: linear-gradient(to right, #ee5252, #ff1919, #f9fc37, #ffdc19, #37cc58, #16f069);
+    background-size: 400% 400%;
+    transition: all 0.3s;
+}
+
+.connected {
+    background-position: 100% 100%;
+}
+
+.connecting {
+    background-position: 50% 50%;
+}
+
+.disconnected {
+    background-position: 0% 0%;
+}

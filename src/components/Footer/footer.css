@@ -1,0 +1,8 @@
+.text-vertical{
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+}
+
+.footer-container{
+    background-color: gold;    
+}
