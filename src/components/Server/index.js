@@ -12,28 +12,36 @@ export default function Server({ messages }) {
             <Heading heading={'Server messages'} body={'View what the server is responding'} icon={<CloudIcon />} button buttonText='Collapse all' buttonIcon={<CloseFullscreenIcon />} onClick={() => {
                 setExpanded(null)
             }} />
-            {messages && messages.map((message, index) => {
-                return (
-                    <Accordion expanded={index === expanded}>
-                        <AccordionSummary
-                            onClick={() => {
-                                setExpanded(expanded === null ? index : null)
-                            }}
-                            expandIcon={<ExpandMoreIcon />}
-                        >
-                            <Typography>
-                                {message.listener}
-                            </Typography>
-                        </AccordionSummary>
-                        <Divider className='mb-3' />
-                        <AccordionDetails sx={{maxHeight: 200, overflow: 'hidden auto'}}>
-                            <Typography fontFamily='SFProText-Regular'>
-                                <pre>{message.msg}</pre>
-                            </Typography>
-                        </AccordionDetails>
-                    </Accordion>
-                )
-            })}
+            {messages.length ?
+                messages.map((message, index) => {
+                    return (
+                        <Accordion expanded={index === expanded}>
+                            <AccordionSummary
+                                onClick={() => {
+                                    setExpanded(expanded === null ? index : null)
+                                }}
+                                expandIcon={<ExpandMoreIcon />}
+                            >
+                                <Typography>
+                                    {message.listener}
+                                </Typography>
+                            </AccordionSummary>
+                            <Divider className='mb-3' />
+                            <AccordionDetails sx={{ maxHeight: 200, overflow: 'hidden auto' }}>
+                                <Typography fontFamily='SFProText-Regular'>
+                                    <pre>{message.msg}</pre>
+                                </Typography>
+                            </AccordionDetails>
+                        </Accordion>
+                    )
+                })
+                :
+                <Container disableGutters maxWidth='xl'>
+                    <Typography variant='caption' color='GrayText'>
+                        No server responses yet
+                    </Typography>
+                </Container>
+            }
         </Container>
     )
 }

@@ -51,7 +51,7 @@ export default function Listeners({ listeners, onAddListener, status, onRemoveLi
                         )
                     })
                     :
-                    <Container>
+                    <Container maxWidth='xl' disableGutters>
                         <Typography variant='caption' color='GrayText'>
                             No listeners added
                         </Typography>

@@ -5,7 +5,7 @@ import PowerIcon from '@mui/icons-material/Power';
 import WifiIcon from '@mui/icons-material/Wifi';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import { AppBar, Container, Toolbar, Typography, Button } from '@mui/material';
+import { AppBar, Container, Toolbar, Typography, Button, Avatar } from '@mui/material';
 
 export default function Header({ onTabChanged, activeTab }) {
 
@@ -17,12 +17,9 @@ export default function Header({ onTabChanged, activeTab }) {
         <AppBar position='static'>
             <Container maxWidth='xl'>
                 <Toolbar disableGutters className='justify-content-between'>
-                    <Typography
-                        variant='h6'
-                        noWrap
-                    >
-                        Socketeer
-                    </Typography>
+                    <img src='/socketeer.png' style = {{
+                        height: 24,
+                    }}/>
                     <Tabs value={activeTab} onChange={handleChange} aria-label="tabs" centered>
                         <Tab icon={<PowerIcon />} aria-label="connect" label='Connect'/>
                         <Tab icon={<WifiIcon />} aria-label="emit" label='Emit'/>

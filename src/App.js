@@ -21,10 +21,14 @@ const theme = createTheme({
     secondary: {
       main: '#f50057',
     },
+    background: {
+      default: '#0C0013',
+      paper: '#0C0013'
+    }
   },
   typography: {
-    fontFamily: 'SFProText-Medium'
-  }
+    fontFamily: 'SFProText-Medium',
+  },
 })
 
 const styles = createStyles({
@@ -103,34 +107,32 @@ function App() {
   }
 
   return (
-    <div style={styles.root}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Header onTabChanged={handleTabChanged} activeTab={tabIndex} />
-        <AnimatePresence>
-          {tabIndex === 0 &&
-            <motion.div
-              key={Math.random()}
-              initial={{ x: -200, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ opacity: 0}}
-              transition={{ duration: 0.3 }}
-            >
-              <Connection
-                onConnect={onConnect}
-                listeners={connection.data.listeners}
-                status={connection.status}
-                onAddListener={onAddListener}
-                onRemoveListener={onRemoveListener}
-              />
-            </motion.div>
-          }
-        </AnimatePresence>
-        <Server messages={messages} />
-        <Status status={connection.status} data={connection.data} />
-        <Footer />
-      </ThemeProvider>
-    </div>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Header onTabChanged={handleTabChanged} activeTab={tabIndex} />
+      <AnimatePresence>
+        {tabIndex === 0 &&
+          <motion.div
+            key={Math.random()}
+            initial={{ x: -200, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Connection
+              onConnect={onConnect}
+              listeners={connection.data.listeners}
+              status={connection.status}
+              onAddListener={onAddListener}
+              onRemoveListener={onRemoveListener}
+            />
+          </motion.div>
+        }
+      </AnimatePresence>
+      <Server messages={messages} />
+      <Status status={connection.status} data={connection.data} />
+      <Footer />
+    </ThemeProvider>
   )
 }
 
