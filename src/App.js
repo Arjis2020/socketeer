@@ -1,6 +1,6 @@
 import './App.css';
 import { ThemeProvider, createTheme, createStyles } from '@mui/material/styles';
-import { Button, CssBaseline } from '@mui/material';
+import { Alert, Button, CssBaseline, Slide, Snackbar } from '@mui/material';
 import Header from './components/Header';
 import Connection from './components/Connection';
 import Server from './components/Server';
@@ -10,7 +10,7 @@ import Footer from './components/Footer';
 //socket
 import Socket from './socket'
 import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import Settings from './components/Settings';
 
 const theme = createTheme({
   palette: {
@@ -23,19 +23,12 @@ const theme = createTheme({
     },
     background: {
       default: '#0C0013',
-      paper: '#0C0013'
+      paper: '#150021'
     }
   },
   typography: {
     fontFamily: 'SFProText-Medium',
   },
-})
-
-const styles = createStyles({
-  root: {
-    width: '100vw',
-    height: '100vh',
-  }
 })
 
 function App() {
@@ -49,9 +42,32 @@ function App() {
   })
   const [messages, setMessages] = useState([])
   const [tabIndex, setTabIndex] = useState(0)
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    component: null
+  })
+
+  const handleAlertClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbar({
+      open: false,
+      component: null
+    });
+  };
+
+  const replacer = (value) => {
+    value = value.replace(/[\n\t]/g, '');
+    value = value.replace(/ /g, '');
+    return (value)
+  }
+
 
   const onConnect = (url, options) => {
     try {
+      options = JSON.parse(replacer(options))
       setConnection({
         status: 'connecting',
         data: {
@@ -61,15 +77,63 @@ function App() {
         }
       })
       Socket.init(url, options, (data) => {
+        setSnackbar({
+          open: true,
+          component:
+            <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%' }}>
+              Connected to {url}
+            </Alert>
+        })
         setConnection({
           status: 'connected',
           data
         })
+      }, (error) => {
+        setSnackbar({
+          open: true,
+          component:
+            <Alert onClose={handleAlertClose} severity="error" sx={{ width: '100%' }}>
+              {error}
+            </Alert>
+        })
+        setConnection({
+          status: 'disconnected',
+          data: {
+            id: '',
+            url,
+            listeners: []
+          }
+        })
       })
     }
     catch (err) {
-      console.log(err.toString())
+      setSnackbar({
+        open: true,
+        component:
+          <Alert onClose={handleAlertClose} severity="error" sx={{ width: '100%' }}>
+            {err.toString()}
+          </Alert>
+      })
     }
+  }
+
+  const onDisconnect = (url) => {
+    Socket.disconnect()
+    setSnackbar({
+      open: true,
+      component:
+        <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%' }}>
+          Disconnected from {url}
+        </Alert>
+    })
+    setConnection({
+      status: 'disconnected',
+      data: {
+        id: '',
+        url,
+        listeners: []
+      }
+    })
   }
 
   const onAddListener = (listener) => {
@@ -101,34 +165,48 @@ function App() {
     })
   }
 
+  const onSettingsUpdate = (settings) => {
+    Socket.setSettings(settings)
+  }
+
   const handleTabChanged = (index) => {
     console.log(index)
     setTabIndex(index)
   }
 
+  const SlideTransition = (props) => {
+    return <Slide {...props} direction="up" />;
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
+      <Settings
+        status={connection.status}
+        left={theme.breakpoints.values.xl}
+        onUpdate={onSettingsUpdate}
+      />
+      <Snackbar
+        key={Math.random()}
+        open={snackbar.open}
+        autoHideDuration={4000}
+        onClose={handleAlertClose}
+        TransitionComponent={SlideTransition}
+        sx={{ background: theme.palette.success }}
+      >
+        {snackbar.component}
+      </Snackbar>
       <Header onTabChanged={handleTabChanged} activeTab={tabIndex} />
-      <AnimatePresence>
-        {tabIndex === 0 &&
-          <motion.div
-            key={Math.random()}
-            initial={{ x: -200, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Connection
-              onConnect={onConnect}
-              listeners={connection.data.listeners}
-              status={connection.status}
-              onAddListener={onAddListener}
-              onRemoveListener={onRemoveListener}
-            />
-          </motion.div>
-        }
-      </AnimatePresence>
+      {tabIndex === 0 &&
+        <Connection
+          onConnect={onConnect}
+          listeners={connection.data.listeners}
+          status={connection.status}
+          onAddListener={onAddListener}
+          onRemoveListener={onRemoveListener}
+          onDisconnect={onDisconnect}
+        />
+      }
       <Server messages={messages} />
       <Status status={connection.status} data={connection.data} />
       <Footer />

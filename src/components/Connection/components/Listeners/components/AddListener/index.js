@@ -63,6 +63,6 @@ export default function AddListener({ open, onClose, onAdd }) {
                     </Stack>
                 </Stack>
             </Container>
-        </Modal >
+        </Modal>
     )
 }

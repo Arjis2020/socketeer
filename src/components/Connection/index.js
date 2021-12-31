@@ -6,8 +6,9 @@ import PowerOffIcon from '@mui/icons-material/PowerOff';
 import Heading from '../Heading';
 import TuneIcon from '@mui/icons-material/Tune';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { LoadingButton } from '@mui/lab';
 
-export default function Connection({ onConnect, listeners, status, onAddListener, onRemoveListener }) {
+export default function Connection({ onConnect, listeners, status, onAddListener, onRemoveListener, onDisconnect }) {
     const [protocol, setProtocol] = useState('HTTP')
     const [options, setOptions] = useState('{ \n\t"forceNew": true, \n\t"path": "/socket.io" \n}')
     const [url, setUrl] = useState('localhost:3000')
@@ -41,12 +42,6 @@ export default function Connection({ onConnect, listeners, status, onAddListener
         return value.includes(':')
     }
 
-    const replacer = (value) => {
-        value = value.replace(/[\n\t]/g, '');
-        value = value.replace(/ /g, '');
-        return (value)
-    }
-
     return (
         <Container
             maxWidth='xl'
@@ -54,7 +49,11 @@ export default function Connection({ onConnect, listeners, status, onAddListener
         >
             <Stack direction='column' spacing={2}>
                 <Stack direction='row' alignItems='stretch' spacing={1}>
-                    <FormControl required sx={{ width: 0.15 }}>
+                    <FormControl
+                        required
+                        sx={{ width: 0.15 }}
+                        disabled={status === 'connecting'}
+                    >
                         <InputLabel>
                             Protocol
                         </InputLabel>
@@ -88,26 +87,34 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                         value={url}
                         fullWidth
                         onChange={handleUrlChange}
+                        disabled={status === 'connecting'}
                     />
-                    <Button
+                    <LoadingButton
                         variant='contained'
-                        color={status === 'disconnected' ? 'primary' : status === 'connecting' ? 'primary' : 'error'}
+                        color={status === 'disconnected' ? 'primary' : 'error'}
                         size='large'
                         startIcon={
                             status === 'disconnected' ?
                                 <PowerIcon /> :
-                                status === 'connecting' ?
-                                    <PowerIcon /> :
-                                    < PowerOffIcon />
+                                < PowerOffIcon />
                         }
-                        onClick={() => onConnect(protocol.toLowerCase() + '://' + url.toLowerCase(), JSON.parse(replacer(options)))}
+                        onClick={() => {
+                            if (status === 'disconnected') {
+                                onConnect(protocol.toLowerCase() + '://' + url.toLowerCase(), /* JSON.parse(replacer(options)) */options)
+                            }
+                            else if (status === 'connected') {
+                                onDisconnect(protocol.toLowerCase() + '://' + url.toLowerCase())
+                            }
+                        }}
+                        loading={status === 'connecting'}
+                        disabled={status === 'connecting'}
                     >
                         <Typography>
                             {status === 'disconnected' ? 'Connect' :
                                 status === 'connecting' ? 'Connecting' :
                                     'Disconnect'}
                         </Typography>
-                    </Button>
+                    </LoadingButton>
 
                 </Stack>
                 <Stack direction='row' spacing={2}>
@@ -123,9 +130,10 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                             type='text'
                             size='small'
                             fullWidth
+                            disabled={status === 'connecting'}
                         />
                     </Stack>
-                    <Listeners listeners={listeners} onAddListener={onAddListener} status = {status} onRemoveListener={onRemoveListener}/>
+                    <Listeners listeners={listeners} onAddListener={onAddListener} status={status} onRemoveListener={onRemoveListener} />
                 </Stack>
             </Stack>
         </Container>

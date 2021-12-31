@@ -5,6 +5,7 @@ import PowerIcon from '@mui/icons-material/Power';
 import WifiIcon from '@mui/icons-material/Wifi';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { AppBar, Container, Toolbar, Typography, Button, Avatar } from '@mui/material';
 
 export default function Header({ onTabChanged, activeTab }) {
@@ -21,9 +22,10 @@ export default function Header({ onTabChanged, activeTab }) {
                         height: 24,
                     }}/>
                     <Tabs value={activeTab} onChange={handleChange} aria-label="tabs" centered>
-                        <Tab icon={<PowerIcon />} aria-label="connect" label='Connect'/>
-                        <Tab icon={<WifiIcon />} aria-label="emit" label='Emit'/>
-                        <Tab icon={<FavoriteIcon />} aria-label="favorite" label='Favorites'/>
+                        <Tab icon={<PowerIcon />} aria-label="connect" /*label='Connect'*//>
+                        <Tab icon={<WifiIcon />} aria-label="emit" /*label='Emit'*//>
+                        <Tab icon={<FavoriteIcon />} aria-label="favorite" /*label='Favorites'*//>
+                        <Tab icon={<ShowChartIcon />} aria-label="metrics" /*label='Metrics'*//>
                     </Tabs>
                     <Button variant='contained' sx={{ fontWeight: '600' }} endIcon={<PhoneIphoneIcon />}>
                         Get the app
