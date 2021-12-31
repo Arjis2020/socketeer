@@ -10,7 +10,7 @@ import Footer from './components/Footer';
 //socket
 import Socket from './socket'
 import { useState } from 'react';
-import { ConnectingAirports } from '@mui/icons-material';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const theme = createTheme({
   palette: {
@@ -43,6 +43,8 @@ function App() {
       listeners: []
     }
   })
+  const [messages, setMessages] = useState([])
+  const [tabIndex, setTabIndex] = useState(0)
 
   const onConnect = (url, options) => {
     try {
@@ -66,13 +68,65 @@ function App() {
     }
   }
 
+  const onAddListener = (listener) => {
+    setConnection({
+      status: connection.status,
+      data: {
+        id: connection.data.id,
+        url: connection.data.url,
+        listeners: [...connection.data.listeners, { name: listener, removable: true }]
+      }
+    })
+    Socket.addListener(listener, (listener, data) => {
+      setMessages([...messages, { listener, msg: JSON.stringify(data, undefined, 4) }])
+    })
+  }
+
+  const onRemoveListener = (listener) => {
+    setConnection({
+      status: connection.status,
+      data: {
+        id: connection.data.id,
+        url: connection.data.url,
+        listeners: connection.data.listeners.filter(item => item.name !== listener)
+      }
+    })
+
+    Socket.removeListener(listener, (listener, data) => {
+      setMessages([...messages, { listener, msg: JSON.stringify(data, undefined, 4) }])
+    })
+  }
+
+  const handleTabChanged = (index) => {
+    console.log(index)
+    setTabIndex(index)
+  }
+
   return (
     <div style={styles.root}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Header />
-        <Connection onConnect={onConnect} listeners={connection.data.listeners} status={connection.status} />
-        <Server messages={[{ title: 'prices-update', msg: JSON.stringify({ 'bitcoin': '151412', 'ethereum': '151412' }, undefined, 4) }]} />
+        <Header onTabChanged={handleTabChanged} activeTab={tabIndex} />
+        <AnimatePresence>
+          {tabIndex === 0 &&
+            <motion.div
+              key={Math.random()}
+              initial={{ x: -200, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ opacity: 0}}
+              transition={{ duration: 0.3 }}
+            >
+              <Connection
+                onConnect={onConnect}
+                listeners={connection.data.listeners}
+                status={connection.status}
+                onAddListener={onAddListener}
+                onRemoveListener={onRemoveListener}
+              />
+            </motion.div>
+          }
+        </AnimatePresence>
+        <Server messages={messages} />
         <Status status={connection.status} data={connection.data} />
         <Footer />
       </ThemeProvider>

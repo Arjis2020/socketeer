@@ -1,12 +1,13 @@
 import { Avatar, Button, Divider, Stack, Typography } from '@mui/material'
 import { pink, yellow } from '@mui/material/colors'
 import React from 'react'
+import './heading.css'
 
-export default function Heading({ heading, body, icon, button, buttonText, buttonIcon, onClick }) {
+export default function Heading({ heading, body, href, icon, button, buttonText, buttonIcon, onClick, sx = { marginBottom: 1, spacing: 1 } }) {
     return (
-        <div className='mb-3'>
+        <div className={`mb-${sx?.marginBottom ? String(sx.marginBottom) : '3'}`}>
             <Stack direction='row' justifyContent='space-between' alignItems='center'>
-                <Stack direction='row' spacing={1} alignItems='center' marginBottom={1} >
+                <Stack direction='row' spacing={sx?.spacing ? sx.spacing : 1} alignItems='center' marginBottom={1} >
                     {icon && <Avatar sx={{ bgcolor: yellow[600] }}>
                         {icon}
                     </Avatar>}
@@ -25,6 +26,10 @@ export default function Heading({ heading, body, icon, button, buttonText, butto
                         size='medium'
                         variant='contained'
                         onClick={onClick}
+                        href={href}
+                        target={href && '_blank'}
+                        rel={href && 'noopener noreferrer'}
+                        className='button'
                     >
                         {buttonText}
                     </Button>

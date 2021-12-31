@@ -1,24 +1,27 @@
-import { Avatar, Box, Container, Divider, Paper, Stack, Typography, IconButton } from '@mui/material'
+import { Avatar, Box, Container, Divider, Paper, Stack, Typography, IconButton, Chip } from '@mui/material'
 import React, { useState } from 'react'
 import Heading from '../../../Heading'
 import HearingIcon from '@mui/icons-material/Hearing';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
-export default function Listeners({ listeners }) {
+import './listeners.css'
+import AddListener from './components/AddListener';
+
+export default function Listeners({ listeners, onAddListener, status, onRemoveListener }) {
     const [openModal, setOpenModal] = useState(false)
-    const [allListeners, setListeners] = useState(listeners)
-    console.log(allListeners)
+
     return (
         <Container maxWidth='xl' disableGutters>
-            <Heading heading={'Listeners'} body={'Declare what server emissions you would like to listen for'} icon={<HearingIcon />} button buttonText='Add' buttonIcon={<AddIcon />} onClick={() => {
+            <AddListener open={openModal} onClose={() => setOpenModal(false)} onAdd={onAddListener} />
+            <Heading heading={'Listeners'} body={'Declare what server emissions you would like to listen for'} icon={<HearingIcon />} button={status === 'connected'} buttonText='Add' buttonIcon={<AddIcon />} onClick={() => {
                 setOpenModal(true)
             }} />
             <Stack height={168} overflow='hidden auto'>
-                {listeners ?
-                    allListeners.map(listener => {
+                {listeners.length ?
+                    listeners.map(listener => {
                         return (
-                            <Paper className='p-2 mb-2'>
+                            <Paper className={`p-2 mb-2 ${!listener.removable && 'dim disabled'}`}>
                                 <Stack direction='row' justifyContent='space-between'>
                                     <Stack
                                         spacing={2}
@@ -30,17 +33,19 @@ export default function Listeners({ listeners }) {
                                             {listener.name}
                                         </Typography>
                                     </Stack>
-                                    <IconButton
-                                        color='error'
-                                        size='small'
-                                        onClick={() => {
-                                            setListeners(allListeners.filter(item => {
-                                                return item !== listener.name
-                                            }))
-                                        }}
-                                    >
-                                        <RemoveCircleOutlineIcon />
-                                    </IconButton>
+                                    {listener.removable ?
+                                        <IconButton
+                                            color='error'
+                                            size='small'
+                                            onClick={() => {
+                                                onRemoveListener(listener.name)
+                                            }}
+                                        >
+                                            <RemoveCircleOutlineIcon />
+                                        </IconButton>
+                                        :
+                                        <Chip label='Not removable' color='error' />
+                                    }
                                 </Stack>
                             </Paper>
                         )

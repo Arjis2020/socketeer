@@ -9,11 +9,30 @@ function init(url = '', options = {}, onConnect = () => { }) {
     })
 }
 
-const listeners = []
+function disconnect(){
+    if(socket){
+        socket.disconnect()
+        socket = null
+    }
+}
+
+let listeners = []
 
 function addListener(key = '', onMessageReceived = () => { }) {
     if (socket) {
         listeners.push(key)
+        socket.removeAllListeners()
+        return listen(onMessageReceived)
+    }
+    else {
+        throw 'Socket was not initialized'
+    }
+}
+
+function removeListener(key = '', onMessageReceived = () => { }) {
+    if (socket) {
+        listeners = listeners.filter(item => item !== key)
+        socket.removeAllListeners()
         return listen(onMessageReceived)
     }
     else {
@@ -38,4 +57,4 @@ function listen(onMessageReceived = () => { }) {
     }
 }
 
-export default { init, addListener, emit }
+export default { init, addListener, removeListener, emit, disconnect }

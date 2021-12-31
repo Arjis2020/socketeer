@@ -1,10 +1,13 @@
-import { Button, Container, FormControl, FormGroup, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography } from '@mui/material'
+import { Button, Container, FormControl, FormGroup, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography, Divider } from '@mui/material'
 import React, { useState } from 'react'
 import PowerIcon from '@mui/icons-material/Power';
 import Listeners from './components/Listeners';
 import PowerOffIcon from '@mui/icons-material/PowerOff';
+import Heading from '../Heading';
+import TuneIcon from '@mui/icons-material/Tune';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
-export default function Connection({ onConnect, listeners, status }) {
+export default function Connection({ onConnect, listeners, status, onAddListener, onRemoveListener }) {
     const [protocol, setProtocol] = useState('HTTP')
     const [options, setOptions] = useState('{ \n\t"forceNew": true, \n\t"path": "/socket.io" \n}')
     const [url, setUrl] = useState('localhost:3000')
@@ -41,7 +44,6 @@ export default function Connection({ onConnect, listeners, status }) {
     const replacer = (value) => {
         value = value.replace(/[\n\t]/g, '');
         value = value.replace(/ /g, '');
-        console.log(value)
         return (value)
     }
 
@@ -109,18 +111,21 @@ export default function Connection({ onConnect, listeners, status }) {
 
                 </Stack>
                 <Stack direction='row' spacing={2}>
-                    <TextField
-                        multiline
-                        rows={10}
-                        label='Options'
-                        variant='outlined'
-                        value={options}
-                        onChange={handleOptionsChange}
-                        type='text'
-                        size='small'
-                        fullWidth
-                    />
-                    <Listeners listeners={listeners} />
+                    <Stack direction='column' spacing={1} sx={{ width: 1 }}>
+                        <Heading heading='Options' body='Pass some options to the socket connection' icon={<TuneIcon />} button buttonText='View options' href='https://socket.io/docs/v4/client-options/' buttonIcon={<OpenInNewIcon />} />
+                        <TextField
+                            multiline
+                            rows={10}
+                            label='Options'
+                            variant='outlined'
+                            value={options}
+                            onChange={handleOptionsChange}
+                            type='text'
+                            size='small'
+                            fullWidth
+                        />
+                    </Stack>
+                    <Listeners listeners={listeners} onAddListener={onAddListener} status = {status} onRemoveListener={onRemoveListener}/>
                 </Stack>
             </Stack>
         </Container>
