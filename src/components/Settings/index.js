@@ -1,9 +1,10 @@
 import { Fab, Modal, Stack, Container, Box, Slider, TextField, Button } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import React, { useState } from 'react'
 import SettingsIcon from '@mui/icons-material/Settings';
 import Heading from '../Heading';
 
-export default function Settings({ status, left, onUpdate }) {
+export default function Settings({ status, onUpdate }) {
     const [open, setOpen] = useState(false)
     const [sliderValue, setSliderValue] = useState(5)
 
@@ -23,18 +24,25 @@ export default function Settings({ status, left, onUpdate }) {
         setSliderValue(Number(e.target.value) / 1000)
     }
 
+    const useStyles = makeStyles(theme => ({
+        fab: {
+            position: 'fixed',
+            bottom: theme.spacing(10),
+            right: theme.spacing(10),
+        },
+    }));
+
+    const classes = useStyles()
+
     return (
-        <Box sx={{
-            position: 'absolute',
-            left,
-            bottom: 100
-        }}>
+        <Container maxWidth='xl'>
             <Fab
                 color='primary'
                 aria-label='settings'
                 onClick={openModal}
                 size='large'
                 disabled={status === 'connecting'}
+                className={classes.fab}
             >
                 <SettingsIcon />
             </Fab>
@@ -94,6 +102,6 @@ export default function Settings({ status, left, onUpdate }) {
                     </Stack>
                 </Container>
             </Modal>
-        </Box>
+        </Container>
     )
 }

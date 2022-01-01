@@ -9,8 +9,9 @@ import Footer from './components/Footer';
 
 //socket
 import Socket from './socket'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Settings from './components/Settings';
+import Pinger from './pinger';
 
 const theme = createTheme({
   palette: {
@@ -46,6 +47,23 @@ function App() {
     open: false,
     component: null
   })
+
+  useEffect(() => {
+    function ping() {
+      return Pinger(connection.data.url,
+        (ping_in_ms) => {
+          console.log(ping_in_ms)
+        },
+        (err) => {
+          console.log("ERR", err)
+        }
+      )
+    }
+    console.log("CONN", connection.status)
+    if (connection.status === 'connected') {
+      ping()
+    }
+  }, [connection])
 
   const handleAlertClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -100,7 +118,7 @@ function App() {
           status: 'disconnected',
           data: {
             id: '',
-            url,
+            url: '',
             listeners: []
           }
         })
@@ -130,7 +148,7 @@ function App() {
       status: 'disconnected',
       data: {
         id: '',
-        url,
+        url: '',
         listeners: []
       }
     })
@@ -181,11 +199,10 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Settings
+      {/* <Settings
         status={connection.status}
-        left={theme.breakpoints.values.xl}
         onUpdate={onSettingsUpdate}
-      />
+      /> */}
       <Snackbar
         key={Math.random()}
         open={snackbar.open}

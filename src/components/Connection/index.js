@@ -100,19 +100,20 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                         }
                         onClick={() => {
                             if (status === 'disconnected') {
-                                onConnect(protocol.toLowerCase() + '://' + url.toLowerCase(), /* JSON.parse(replacer(options)) */options)
+                                return onConnect(protocol.toLowerCase() + '://' + url.toLowerCase(), options)
                             }
                             else if (status === 'connected') {
-                                onDisconnect(protocol.toLowerCase() + '://' + url.toLowerCase())
+                                return onDisconnect(protocol.toLowerCase() + '://' + url.toLowerCase())
                             }
                         }}
                         loading={status === 'connecting'}
                         disabled={status === 'connecting'}
                     >
                         <Typography>
-                            {status === 'disconnected' ? 'Connect' :
-                                status === 'connecting' ? 'Connecting' :
-                                    'Disconnect'}
+                            {status === 'disconnected' ?
+                                'Connect' :
+                                'Disconnect'
+                            }
                         </Typography>
                     </LoadingButton>
 
