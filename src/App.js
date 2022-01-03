@@ -150,6 +150,26 @@ function App() {
     }
   }
 
+  const onError = (err) => {
+    setSnackbar({
+      open: true,
+      component:
+        <Alert onClose={handleAlertClose} severity="error" sx={{ width: '100%' }}>
+          {err}
+        </Alert>
+    })
+  }
+
+  const onSuccess = (msg) => {
+    setSnackbar({
+      open: true,
+      component:
+        <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%' }}>
+          {msg}
+        </Alert>
+    })
+  }
+
   const onDisconnect = (url) => {
     Socket.disconnect()
     setSnackbar({
@@ -237,6 +257,8 @@ function App() {
           onAddListener={onAddListener}
           onRemoveListener={onRemoveListener}
           onDisconnect={onDisconnect}
+          onError={onError}
+          onSuccess={onSuccess}
         />
       }
       <Server messages={messages} />

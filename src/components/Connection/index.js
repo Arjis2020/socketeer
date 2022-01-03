@@ -8,10 +8,12 @@ import TuneIcon from '@mui/icons-material/Tune';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { LoadingButton } from '@mui/lab';
 
-export default function Connection({ onConnect, listeners, status, onAddListener, onRemoveListener, onDisconnect }) {
+export default function Connection({ onConnect, listeners, status, onAddListener, onRemoveListener, onDisconnect, onError, onSuccess }) {
     const [protocol, setProtocol] = useState('HTTP')
     const [options, setOptions] = useState('{ \n\t"forceNew": true, \n\t"path": "/socket.io" \n}')
     const [url, setUrl] = useState('localhost:3000')
+
+    const accepted_protocols = ['http', 'https', 'ws', 'wss']
 
     const handleProtocolChange = (e) => {
         setProtocol(e.target.value)
@@ -32,7 +34,18 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                 else if (!split[0].toLowerCase().match(new RegExp('^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')) && split[0].toLowerCase() !== 'localhost' || (split[0].toLowerCase() === 'http' || split[0].toLowerCase() === 'https' || split[0].toLowerCase() === 'ws' || split[0].toLowerCase() === 'wss')) {
                     value = split[1]
                 }
-                setProtocol(split[0].toUpperCase())
+
+                if (split[0].toLowerCase()) {
+                    if (split[0].toLowerCase() !== 'localhost') {
+                        if (accepted_protocols.includes(split[0].toLowerCase())) {
+                            setProtocol(split[0].toUpperCase())
+                            onSuccess(`Updated protocol to ${split[0].toUpperCase()}`)
+                        }
+                        else {
+                            onError('Invalid protocol: ERR_INVALID_PROTOCOL')
+                        }
+                    }
+                }
             }
         }
         value = value.replace(new RegExp('//', 'g'), '')
@@ -46,7 +59,7 @@ export default function Connection({ onConnect, listeners, status, onAddListener
     return (
         <Container
             maxWidth='xl'
-            className='py-3'
+            className='py-3 h-50'
         >
             <Stack direction='column' spacing={2}>
                 <Stack direction='row' alignItems='stretch' spacing={1}>
@@ -87,6 +100,7 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                         type='url'
                         value={url}
                         fullWidth
+                        placeholder='Ignore protocols'
                         onChange={handleUrlChange}
                         disabled={status === 'connecting'}
                     />
@@ -132,6 +146,7 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                             type='text'
                             size='small'
                             fullWidth
+                            placeholder='Pass in required options'
                             disabled={status === 'connecting'}
                         />
                     </Stack>

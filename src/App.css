@@ -4,6 +4,10 @@
   padding: 0;
 }
 
+.h-50 {
+  height: 50vh !important;
+}
+
 @font-face {
   font-family: 'SFProText-Regular';
   src: local('Lato'), url(./fonts/SFProText-Regular.ttf) format('truetype');

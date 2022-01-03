@@ -8,7 +8,7 @@ export default function Status({ status, data }) {
             <Container maxWidth='xl'>
                 <Stack direction='row' alignItems='center' justifyContent='space-between'>
                     <Stack direction='row' spacing={1} alignItems='center'>
-                        <Avatar alt='socket.io' src='https://socket.io/images/logo.svg' sx={{ width: 22, height: 22 }} />
+                        <Avatar alt='socket.io' src='/socket.io.svg' sx={{ width: 22, height: 22 }} />
                         <Typography color='black' fontFamily='SFProText-Bold'>
                             Socket.io v4.x
                         </Typography>
