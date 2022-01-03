@@ -29,9 +29,10 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                 if (split[0].length === 0) {
                     value = split[1]
                 }
-                else if (!split[0].match(new RegExp('^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')) && split[0] !== 'localhost' || (split[0] === 'http' || split[0] === 'https' || split[0] === 'ws' || split[0] === 'wss')) {
+                else if (!split[0].toLowerCase().match(new RegExp('^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')) && split[0].toLowerCase() !== 'localhost' || (split[0].toLowerCase() === 'http' || split[0].toLowerCase() === 'https' || split[0].toLowerCase() === 'ws' || split[0].toLowerCase() === 'wss')) {
                     value = split[1]
                 }
+                setProtocol(split[0].toUpperCase())
             }
         }
         value = value.replace(new RegExp('//', 'g'), '')

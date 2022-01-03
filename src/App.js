@@ -47,21 +47,36 @@ function App() {
     open: false,
     component: null
   })
+  //const [pingHistory, setPingHistory] = useState([])
+  let pingHistory = []
 
   useEffect(() => {
-    function ping() {
-      return Pinger(connection.data.url,
-        (ping_in_ms) => {
-          console.log(ping_in_ms)
-        },
-        (err) => {
-          console.log("ERR", err)
-        }
-      )
-    }
     console.log("CONN", connection.status)
+    let interval
     if (connection.status === 'connected') {
-      ping()
+      interval = setInterval(() => {
+        console.log("LEN", pingHistory.length + ", " + pingHistory[pingHistory.length - 1])
+        Pinger(connection.data.url,
+          (ping_in_ms) => {
+            pingHistory.push(ping_in_ms)
+          },
+          (err) => {
+            console.log("ERR", err.toString())
+            setSnackbar({
+              open: true,
+              component:
+                <Alert onClose={handleAlertClose} severity="error" sx={{ width: '100%' }}>
+                  {err.toString()}
+                </Alert>
+            })
+          }
+        )
+      }, 5000)
+    }
+    else {
+      if (interval) {
+        clearInterval(interval)
+      }
     }
   }, [connection])
 
@@ -209,7 +224,7 @@ function App() {
         autoHideDuration={4000}
         onClose={handleAlertClose}
         TransitionComponent={SlideTransition}
-        sx={{ background: theme.palette.success }}
+      /* sx={{ background: theme.palette.success }} */
       >
         {snackbar.component}
       </Snackbar>
