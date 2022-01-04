@@ -76,6 +76,10 @@ export default function Settings({ status, onUpdate }) {
                             <Slider
                                 aria-label="timeout"
                                 value={sliderValue}
+                                min={5}
+                                step={1}
+                                max={20}
+                                marks
                                 onChange={handleSliderChange}
                             />
                             <TextField

@@ -57,102 +57,97 @@ export default function Connection({ onConnect, listeners, status, onAddListener
     }
 
     return (
-        <Container
-            maxWidth='xl'
-            className='py-3 h-50'
-        >
-            <Stack direction='column' spacing={2}>
-                <Stack direction='row' alignItems='stretch' spacing={1}>
-                    <FormControl
-                        required
-                        sx={{ width: 0.15 }}
-                        disabled={status === 'connecting'}
-                    >
-                        <InputLabel>
-                            Protocol
-                        </InputLabel>
-                        <Select
-                            label='Protocol'
-                            value={protocol}
-                            onChange={handleProtocolChange}
-                            variant='outlined'
-                        >
-                            <MenuItem value='HTTP'>
-                                HTTP
-                            </MenuItem>
-                            <MenuItem value='HTTPS'>
-                                HTTPS
-                            </MenuItem>
-                            <MenuItem value='WS'>
-                                WS
-                            </MenuItem>
-                            <MenuItem value='WSS'>
-                                WSS
-                            </MenuItem>
-                        </Select>
-                    </FormControl>
-                    <TextField
-                        label='URL'
-                        required
-                        id="filled-hidden-label-small"
+        <Stack direction='column' spacing={2}>
+            <Stack direction='row' alignItems='stretch' spacing={1}>
+                <FormControl
+                    required
+                    sx={{ width: 0.15 }}
+                    disabled={status === 'connecting'}
+                >
+                    <InputLabel>
+                        Protocol
+                    </InputLabel>
+                    <Select
+                        label='Protocol'
+                        value={protocol}
+                        onChange={handleProtocolChange}
                         variant='outlined'
-                        size='medium'
-                        type='url'
-                        value={url}
+                    >
+                        <MenuItem value='HTTP'>
+                            HTTP
+                        </MenuItem>
+                        <MenuItem value='HTTPS'>
+                            HTTPS
+                        </MenuItem>
+                        <MenuItem value='WS'>
+                            WS
+                        </MenuItem>
+                        <MenuItem value='WSS'>
+                            WSS
+                        </MenuItem>
+                    </Select>
+                </FormControl>
+                <TextField
+                    label='URL'
+                    required
+                    id="filled-hidden-label-small"
+                    variant='outlined'
+                    size='medium'
+                    type='url'
+                    value={url}
+                    fullWidth
+                    placeholder='Ignore protocols'
+                    onChange={handleUrlChange}
+                    disabled={status === 'connecting'}
+                />
+                <LoadingButton
+                    variant='contained'
+                    color={status === 'disconnected' ? 'primary' : 'error'}
+                    size='large'
+                    startIcon={
+                        status === 'disconnected' ?
+                            <PowerIcon /> :
+                            < PowerOffIcon />
+                    }
+                    onClick={() => {
+                        if (status === 'disconnected') {
+                            return onConnect(protocol.toLowerCase() + '://' + url.toLowerCase(), options)
+                        }
+                        else if (status === 'connected') {
+                            return onDisconnect(protocol.toLowerCase() + '://' + url.toLowerCase())
+                        }
+                    }}
+                    loading={status === 'connecting'}
+                    disabled={status === 'connecting'}
+                >
+                    <Typography>
+                        {status === 'disconnected' ?
+                            'Connect' :
+                            'Disconnect'
+                        }
+                    </Typography>
+                </LoadingButton>
+
+            </Stack>
+            <Stack direction='row' spacing={2}>
+                <Stack direction='column' spacing={1} sx={{ width: 1 }}>
+                    <Heading heading='Options' body='Pass some options to the socket connection' icon={<TuneIcon />} button buttonText='View options' href='https://socket.io/docs/v4/client-options/' buttonIcon={<OpenInNewIcon />} />
+                    <TextField
+                        multiline
+                        rows={10}
+                        label='Options'
+                        variant='outlined'
+                        value={options}
+                        onChange={handleOptionsChange}
+                        type='text'
+                        size='small'
                         fullWidth
-                        placeholder='Ignore protocols'
-                        onChange={handleUrlChange}
+                        placeholder='Pass in required options'
                         disabled={status === 'connecting'}
                     />
-                    <LoadingButton
-                        variant='contained'
-                        color={status === 'disconnected' ? 'primary' : 'error'}
-                        size='large'
-                        startIcon={
-                            status === 'disconnected' ?
-                                <PowerIcon /> :
-                                < PowerOffIcon />
-                        }
-                        onClick={() => {
-                            if (status === 'disconnected') {
-                                return onConnect(protocol.toLowerCase() + '://' + url.toLowerCase(), options)
-                            }
-                            else if (status === 'connected') {
-                                return onDisconnect(protocol.toLowerCase() + '://' + url.toLowerCase())
-                            }
-                        }}
-                        loading={status === 'connecting'}
-                        disabled={status === 'connecting'}
-                    >
-                        <Typography>
-                            {status === 'disconnected' ?
-                                'Connect' :
-                                'Disconnect'
-                            }
-                        </Typography>
-                    </LoadingButton>
-
                 </Stack>
-                <Stack direction='row' spacing={2}>
-                    <Stack direction='column' spacing={1} sx={{ width: 1 }}>
-                        <Heading heading='Options' body='Pass some options to the socket connection' icon={<TuneIcon />} button buttonText='View options' href='https://socket.io/docs/v4/client-options/' buttonIcon={<OpenInNewIcon />} />
-                        <TextField
-                            multiline
-                            rows={10}
-                            label='Options'
-                            variant='outlined'
-                            value={options}
-                            onChange={handleOptionsChange}
-                            type='text'
-                            size='small'
-                            fullWidth
-                            placeholder='Pass in required options'
-                            disabled={status === 'connecting'}
-                        />
-                    </Stack>
-                    <Listeners listeners={listeners} onAddListener={onAddListener} status={status} onRemoveListener={onRemoveListener} />
-                </Stack>
+                <Listeners listeners={listeners} onAddListener={onAddListener} status={status} onRemoveListener={onRemoveListener} />
             </Stack>
-        </Container>
+        </Stack>
     )
 }

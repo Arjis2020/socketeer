@@ -1,6 +1,6 @@
 import './App.css';
 import { ThemeProvider, createTheme, createStyles } from '@mui/material/styles';
-import { Alert, Button, CssBaseline, Slide, Snackbar } from '@mui/material';
+import { Alert, Button, Container, CssBaseline, Slide, Snackbar } from '@mui/material';
 import Header from './components/Header';
 import Connection from './components/Connection';
 import Server from './components/Server';
@@ -51,7 +51,6 @@ function App() {
   let pingHistory = []
 
   useEffect(() => {
-    console.log("CONN", connection.status)
     let interval
     if (connection.status === 'connected') {
       interval = setInterval(() => {
@@ -220,6 +219,13 @@ function App() {
 
   const onSettingsUpdate = (settings) => {
     Socket.setSettings(settings)
+    setSnackbar({
+      open: true,
+      component:
+        <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%' }}>
+          Updated Socketeer settings
+        </Alert>
+    })
   }
 
   const handleTabChanged = (index) => {
@@ -234,10 +240,10 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {/* <Settings
+      <Settings
         status={connection.status}
         onUpdate={onSettingsUpdate}
-      /> */}
+      />
       <Snackbar
         key={Math.random()}
         open={snackbar.open}
@@ -249,18 +255,23 @@ function App() {
         {snackbar.component}
       </Snackbar>
       <Header onTabChanged={handleTabChanged} activeTab={tabIndex} />
-      {tabIndex === 0 &&
-        <Connection
-          onConnect={onConnect}
-          listeners={connection.data.listeners}
-          status={connection.status}
-          onAddListener={onAddListener}
-          onRemoveListener={onRemoveListener}
-          onDisconnect={onDisconnect}
-          onError={onError}
-          onSuccess={onSuccess}
-        />
-      }
+      <Container
+        maxWidth='xl'
+        className='h-50 py-3'
+      >
+        {tabIndex === 0 &&
+          <Connection
+            onConnect={onConnect}
+            listeners={connection.data.listeners}
+            status={connection.status}
+            onAddListener={onAddListener}
+            onRemoveListener={onRemoveListener}
+            onDisconnect={onDisconnect}
+            onError={onError}
+            onSuccess={onSuccess}
+          />
+        }
+      </Container>
       <Server messages={messages} />
       <Status status={connection.status} data={connection.data} />
       <Footer />
