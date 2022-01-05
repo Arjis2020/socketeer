@@ -12,6 +12,7 @@ import Socket from './socket'
 import { useEffect, useState } from 'react';
 import Settings from './components/Settings';
 import Pinger from './pinger';
+import Emission from './components/Emission';
 
 const theme = createTheme({
   palette: {
@@ -54,7 +55,6 @@ function App() {
     let interval
     if (connection.status === 'connected') {
       interval = setInterval(() => {
-        console.log("LEN", pingHistory.length + ", " + pingHistory[pingHistory.length - 1])
         Pinger(connection.data.url,
           (ping_in_ms) => {
             pingHistory.push(ping_in_ms)
@@ -229,7 +229,6 @@ function App() {
   }
 
   const handleTabChanged = (index) => {
-    console.log(index)
     setTabIndex(index)
   }
 
@@ -240,10 +239,10 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Settings
+      {/* <Settings
         status={connection.status}
         onUpdate={onSettingsUpdate}
-      />
+      /> */}
       <Snackbar
         key={Math.random()}
         open={snackbar.open}
@@ -270,6 +269,9 @@ function App() {
             onError={onError}
             onSuccess={onSuccess}
           />
+        }
+        {tabIndex === 1 &&
+          <Emission />
         }
       </Container>
       <Server messages={messages} />

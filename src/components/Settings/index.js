@@ -28,7 +28,7 @@ export default function Settings({ status, onUpdate }) {
         fab: {
             position: 'fixed',
             bottom: theme.spacing(10),
-            right: theme.spacing(10),
+            right: theme.spacing(10)
         },
     }));
 
@@ -42,7 +42,7 @@ export default function Settings({ status, onUpdate }) {
                 onClick={openModal}
                 size='large'
                 disabled={status === 'connecting'}
-                className={classes.fab}
+                //className={classes.fab}
             >
                 <SettingsIcon />
             </Fab>
