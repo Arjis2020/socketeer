@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import Settings from './components/Settings';
 import Pinger from './pinger';
 import Emission from './components/Emission';
+import History from './components/History';
 
 const theme = createTheme({
   palette: {
@@ -217,6 +218,30 @@ function App() {
     })
   }
 
+  const onEmit = (emission, msg) => {
+    try {
+      if (replacer(msg).charAt(0) === '{' || replacer(msg).charAt(0) === '[')
+        msg = JSON.parse(replacer(msg))
+      Socket.emit(emission, msg)
+      setSnackbar({
+        open: true,
+        component:
+          <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%' }}>
+            Emitted event successfully
+          </Alert>
+      })
+    }
+    catch (err) {
+      setSnackbar({
+        open: true,
+        component:
+          <Alert onClose={handleAlertClose} severity="error" sx={{ width: '100%' }}>
+            {err.toString()}
+          </Alert>
+      })
+    }
+  }
+
   const onSettingsUpdate = (settings) => {
     Socket.setSettings(settings)
     setSnackbar({
@@ -271,10 +296,20 @@ function App() {
           />
         }
         {tabIndex === 1 &&
-          <Emission />
+          <Emission
+            onEmit={onEmit}
+          />
+        }
+        {tabIndex === 2 &&
+          <History
+            histories={[{ url: 'https://testapi.bricksprotocol.com', avg_rtt: 55 }]}
+          />
         }
       </Container>
-      <Server messages={messages} />
+      {
+        tabIndex !== 2 &&
+        <Server messages={messages} />
+      }
       <Status status={connection.status} data={connection.data} />
       <Footer />
     </ThemeProvider>

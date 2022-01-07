@@ -3,10 +3,10 @@ import React, { useState } from 'react'
 import Heading from '../Heading'
 import WifiIcon from '@mui/icons-material/Wifi';
 
-export default function Emission() {
+export default function Emission({ onEmit }) {
 
     const [emission, setEmission] = useState("say-hello")
-    const [emissionMsg, setEmissionMsg] = useState('{\n\tmsg : "hello"\n}')
+    const [emissionMsg, setEmissionMsg] = useState('{\n\t"msg" : "hello"\n}')
 
     const handleEmissionChange = (e) => {
         setEmission(e.target.value)
@@ -44,6 +44,11 @@ export default function Emission() {
             <Button
                 fullWidth
                 variant='contained'
+                onClick={() => {
+                    onEmit(emission, emissionMsg)
+                    setEmission('')
+                    setEmissionMsg('')
+                }}
             >
                 Emit
             </Button>
