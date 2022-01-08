@@ -1,5 +1,5 @@
 import { Button, Container, FormControl, FormGroup, Grid, IconButton, InputLabel, MenuItem, Select, Stack, TextField, Typography, Divider } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PowerIcon from '@mui/icons-material/Power';
 import Listeners from './components/Listeners';
 import PowerOffIcon from '@mui/icons-material/PowerOff';
@@ -8,10 +8,16 @@ import TuneIcon from '@mui/icons-material/Tune';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { LoadingButton } from '@mui/lab';
 
-export default function Connection({ onConnect, listeners, status, onAddListener, onRemoveListener, onDisconnect, onError, onSuccess }) {
+export default function Connection({ onConnect, listeners, status, onAddListener, onRemoveListener, onDisconnect, onError, onSuccess, esc }) {
     const [protocol, setProtocol] = useState('HTTP')
-    const [options, setOptions] = useState('{ \n\t"forceNew": true, \n\t"path": "/socket.io" \n}')
+    const [options, setOptions] = useState('{\n\t"forceNew": true, \n\t"path": "/socket.io"\n}')
     const [url, setUrl] = useState('localhost:3000')
+
+    useEffect(() => {
+        setProtocol(esc?.protocol.toUpperCase() || 'HTTP')
+        setUrl(esc?.url || 'localhost:3000')
+        setOptions(esc?.options || '{\n\t"forceNew": true, \n\t"path": "/socket.io"\n}')
+    }, [esc])
 
     const accepted_protocols = ['http', 'https', 'ws', 'wss']
 
@@ -62,14 +68,14 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                 <FormControl
                     required
                     sx={{ width: 0.15 }}
-                    disabled={status === 'connecting'}
+                    disabled={status !== 'disconnected'}
                 >
                     <InputLabel>
                         Protocol
                     </InputLabel>
                     <Select
                         label='Protocol'
-                        value={protocol}
+                        value={esc?.protocol.toUpperCase() || protocol}
                         onChange={handleProtocolChange}
                         variant='outlined'
                     >
@@ -94,11 +100,11 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                     variant='outlined'
                     size='medium'
                     type='url'
-                    value={url}
+                    value={esc?.url || url}
                     fullWidth
                     placeholder='Ignore protocols'
                     onChange={handleUrlChange}
-                    disabled={status === 'connecting'}
+                    disabled={status !== 'disconnected'}
                 />
                 <LoadingButton
                     variant='contained'
@@ -137,16 +143,16 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                         rows={10}
                         label='Options'
                         variant='outlined'
-                        value={options}
+                        value={esc?.options || options}
                         onChange={handleOptionsChange}
                         type='text'
                         size='small'
                         fullWidth
                         placeholder='Pass in required options'
-                        disabled={status === 'connecting'}
+                        disabled={status !== 'disconnected'}
                     />
                 </Stack>
-                <Listeners listeners={listeners} onAddListener={onAddListener} status={status} onRemoveListener={onRemoveListener} />
+                <Listeners listeners={esc?.listeners || listeners} onAddListener={onAddListener} status={status} onRemoveListener={onRemoveListener} />
             </Stack>
         </Stack>
     )

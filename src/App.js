@@ -15,6 +15,10 @@ import Pinger from './pinger';
 import Emission from './components/Emission';
 import History from './components/History';
 
+//utils
+import LocalStorage from './localStorage'
+import keys from './localStorage.keys.json'
+
 const theme = createTheme({
   palette: {
     mode: 'dark',
@@ -40,6 +44,7 @@ function App() {
     data: {
       id: '',
       url: '',
+      options: {},
       listeners: []
     }
   })
@@ -49,8 +54,17 @@ function App() {
     open: false,
     component: null
   })
+  const [esc, setEsc] = useState(null)
   //const [pingHistory, setPingHistory] = useState([])
   let pingHistory = []
+
+  const avg = (array = []) => {
+    let sum = 0
+    array.forEach(item => {
+      sum += item
+    })
+    return sum / array.length
+  }
 
   useEffect(() => {
     let interval
@@ -106,6 +120,7 @@ function App() {
         data: {
           id: '',
           url,
+          options,
           listeners: [{ name: 'connect', removable: false }]
         }
       })
@@ -134,6 +149,7 @@ function App() {
           data: {
             id: '',
             url: '',
+            options: {},
             listeners: []
           }
         })
@@ -184,6 +200,7 @@ function App() {
       data: {
         id: '',
         url: '',
+        options: {},
         listeners: []
       }
     })
@@ -195,6 +212,7 @@ function App() {
       data: {
         id: connection.data.id,
         url: connection.data.url,
+        options: connection.data.options,
         listeners: [...connection.data.listeners, { name: listener, removable: true }]
       }
     })
@@ -209,6 +227,7 @@ function App() {
       data: {
         id: connection.data.id,
         url: connection.data.url,
+        options: connection.data.options,
         listeners: connection.data.listeners.filter(item => item.name !== listener)
       }
     })
@@ -253,6 +272,29 @@ function App() {
     })
   }
 
+  const onClear = () => {
+    LocalStorage.clear()
+    setSnackbar({
+      open: true,
+      component:
+        <Alert onClose={handleAlertClose} severity="success" sx={{ width: '100%' }}>
+          Successfully cleared history
+        </Alert>
+    })
+  }
+
+  const onLoad = (id) => {
+    LocalStorage.setCurrent(id)
+    let history = LocalStorage.query((history) => history.id === id)
+    onConnect(history.url, history.options)
+    setTabIndex(0)
+    setEsc({
+      url: history.url.split('//')[1],
+      protocol: history.url.split(':')[0],
+      options: JSON.stringify(JSON.parse(replacer(history.options)), undefined, 4)
+    })
+  }
+
   const handleTabChanged = (index) => {
     setTabIndex(index)
   }
@@ -293,6 +335,7 @@ function App() {
             onDisconnect={onDisconnect}
             onError={onError}
             onSuccess={onSuccess}
+            esc={esc}
           />
         }
         {tabIndex === 1 &&
@@ -302,7 +345,9 @@ function App() {
         }
         {tabIndex === 2 &&
           <History
-            histories={[{ url: 'https://testapi.bricksprotocol.com', avg_rtt: 55 }]}
+            histories={JSON.parse(LocalStorage.get(keys.histories))}
+            onClear={onClear}
+            onLoad={onLoad}
           />
         }
       </Container>

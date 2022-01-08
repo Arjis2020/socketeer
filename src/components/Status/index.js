@@ -4,7 +4,7 @@ import './status.css'
 
 export default function Status({ status, data }) {
     return (
-        <div className={`status-container position-absolute start-0 end-0 bottom-0 ${status} p-1`}>
+        <div className={`status-container fixed-bottom ${status} p-1`}>
             <Container maxWidth='xl'>
                 <Stack direction='row' alignItems='center' justifyContent='space-between'>
                     <Stack direction='row' spacing={1} alignItems='center'>
