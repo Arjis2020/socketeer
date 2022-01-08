@@ -14,9 +14,11 @@ export default function Connection({ onConnect, listeners, status, onAddListener
     const [url, setUrl] = useState('localhost:3000')
 
     useEffect(() => {
-        setProtocol(esc?.protocol.toUpperCase() || 'HTTP')
-        setUrl(esc?.url || 'localhost:3000')
-        setOptions(esc?.options || '{\n\t"forceNew": true, \n\t"path": "/socket.io"\n}')
+        if (esc) {
+            setProtocol(esc.protocol.toUpperCase())
+            setUrl(esc.url)
+            setOptions(esc.options)
+        }
     }, [esc])
 
     const accepted_protocols = ['http', 'https', 'ws', 'wss']

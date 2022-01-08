@@ -7,7 +7,9 @@ import LocalStorage from '../../localStorage';
 
 export default function History({ histories, onLoad, onClear }) {
     return (
-        <Stack>
+        <Stack
+            spacing={1}
+        >
             <Heading
                 heading='History'
                 body='View all connection histories'
@@ -17,7 +19,11 @@ export default function History({ histories, onLoad, onClear }) {
                 buttonText='Clear history'
                 onClick={onClear}
             />
-            <Stack direction='column' spacing={1} marginBottom={5}>
+            <Stack
+                direction='column'
+                spacing={1}
+                marginBottom={5}
+            >
                 {histories ?
                     histories.map(history => {
                         return (
@@ -36,8 +42,11 @@ export default function History({ histories, onLoad, onClear }) {
                                             <Typography>
                                                 {history.url}
                                             </Typography>
-                                            <Typography sx={{ mb: 1 }} variant='caption' color='text.secondary'>
+                                            <Typography variant='caption' color='text.secondary'>
                                                 Average RTT: {history.avg_rtt}ms
+                                            </Typography>
+                                            <Typography sx={{ mb: 1 }} variant='caption' color='text.secondary'>
+                                                {history.listeners.length} Listeners
                                             </Typography>
                                         </Stack>
                                     </Stack>

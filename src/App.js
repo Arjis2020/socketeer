@@ -352,7 +352,7 @@ function App() {
         }
       </Container>
       {
-        tabIndex !== 2 &&
+        tabIndex < 2 &&
         <Server messages={messages} />
       }
       <Status status={connection.status} data={connection.data} />
