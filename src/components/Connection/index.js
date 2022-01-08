@@ -8,7 +8,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { LoadingButton } from '@mui/lab';
 
-export default function Connection({ onConnect, listeners, status, onAddListener, onRemoveListener, onDisconnect, onError, onSuccess, esc }) {
+export default function Connection({ onConnect, listeners, status, onAddListener, onRemoveListener, onDisconnect, onError, onSuccess, esc, preview }) {
     const [protocol, setProtocol] = useState('HTTP')
     const [options, setOptions] = useState('{\n\t"forceNew": true, \n\t"path": "/socket.io"\n}')
     const [url, setUrl] = useState('localhost:3000')
@@ -70,7 +70,7 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                 <FormControl
                     required
                     sx={{ width: 0.15 }}
-                    disabled={status !== 'disconnected'}
+                    disabled={status !== 'disconnected' || preview}
                 >
                     <InputLabel>
                         Protocol
@@ -106,7 +106,7 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                     fullWidth
                     placeholder='Ignore protocols'
                     onChange={handleUrlChange}
-                    disabled={status !== 'disconnected'}
+                    disabled={status !== 'disconnected' || preview}
                 />
                 <LoadingButton
                     variant='contained'
@@ -126,7 +126,7 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                         }
                     }}
                     loading={status === 'connecting'}
-                    disabled={status === 'connecting'}
+                    disabled={status === 'connecting' || preview}
                 >
                     <Typography>
                         {status === 'disconnected' ?
@@ -151,10 +151,16 @@ export default function Connection({ onConnect, listeners, status, onAddListener
                         size='small'
                         fullWidth
                         placeholder='Pass in required options'
-                        disabled={status !== 'disconnected'}
+                        disabled={status !== 'disconnected' || preview}
                     />
                 </Stack>
-                <Listeners listeners={esc?.listeners || listeners} onAddListener={onAddListener} status={status} onRemoveListener={onRemoveListener} />
+                <Listeners
+                    listeners={esc?.listeners || listeners}
+                    onAddListener={onAddListener}
+                    status={status}
+                    onRemoveListener={onRemoveListener}
+                    preview={preview}
+                />
             </Stack>
         </Stack>
     )

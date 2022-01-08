@@ -8,15 +8,23 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import './listeners.css'
 import AddListener from './components/AddListener';
 
-export default function Listeners({ listeners, onAddListener, status, onRemoveListener }) {
+export default function Listeners({ listeners, onAddListener, status, onRemoveListener, preview }) {
     const [openModal, setOpenModal] = useState(false)
 
     return (
         <Container maxWidth='xl' disableGutters>
             <AddListener open={openModal} onClose={() => setOpenModal(false)} onAdd={onAddListener} />
-            <Heading heading={'Listeners'} body={'Declare what server emissions you would like to listen for'} icon={<HearingIcon />} button={status === 'connected'} buttonText='Add' buttonIcon={<AddIcon />} onClick={() => {
-                setOpenModal(true)
-            }} />
+            <Heading
+                heading={'Listeners'}
+                body={'Declare what server emissions you would like to listen for'}
+                icon={<HearingIcon />}
+                button={status === 'connected' && !preview}
+                buttonText='Add'
+                buttonIcon={<AddIcon />}
+                onClick={() => {
+                    setOpenModal(true)
+                }}
+            />
             <Stack height={168} overflow='hidden auto'>
                 {listeners.length ?
                     listeners.map(listener => {
