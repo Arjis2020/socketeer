@@ -139,7 +139,15 @@ export default function Connection({ onConnect, listeners, status, onAddListener
             </Stack>
             <Stack direction='row' spacing={2}>
                 <Stack direction='column' spacing={1} sx={{ width: 1 }}>
-                    <Heading heading='Options' body='Pass some options to the socket connection' icon={<TuneIcon />} button buttonText='View options' href='https://socket.io/docs/v4/client-options/' buttonIcon={<OpenInNewIcon />} />
+                    <Heading
+                        heading='Options'
+                        body='Pass some options to the socket connection'
+                        icon={<TuneIcon />}
+                        button={!preview}
+                        buttonText='View options'
+                        href='https://socket.io/docs/v4/client-options/'
+                        buttonIcon={<OpenInNewIcon />}
+                    />
                     <TextField
                         multiline
                         rows={10}

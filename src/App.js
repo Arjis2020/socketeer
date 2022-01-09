@@ -18,6 +18,7 @@ import History from './components/History';
 //utils
 import LocalStorage from './localStorage'
 import keys from './localStorage.keys.json'
+import Donation from './components/Donation';
 
 const theme = createTheme({
   palette: {
@@ -54,16 +55,17 @@ function App() {
     open: false,
     component: null
   })
+  const [donation, setDonation] = useState(false)
   const [esc, setEsc] = useState(null)
   //const [pingHistory, setPingHistory] = useState([])
   let pingHistory = []
 
-  const avg = (array = []) => {
-    let sum = 0
-    array.forEach(item => {
-      sum += item
-    })
-    return sum / array.length
+  const handleDonationDialog = () => {
+    setDonation(true)
+  }
+
+  const onDonationClosed = () => {
+    setDonation(false)
   }
 
   useEffect(() => {
@@ -93,6 +95,12 @@ function App() {
       }
     }
   }, [connection])
+
+  useEffect(() => {
+    setTimeout(() => {
+
+    }, 0)
+  }, [])
 
   const handleAlertClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -320,7 +328,15 @@ function App() {
       >
         {snackbar.component}
       </Snackbar>
-      <Header onTabChanged={handleTabChanged} activeTab={tabIndex} />
+      <Donation
+        open={donation}
+        onClose={onDonationClosed}
+      />
+      <Header
+        onTabChanged={handleTabChanged}
+        activeTab={tabIndex}
+        onDonateClicked={handleDonationDialog}
+      />
       <Container
         maxWidth='xl'
         className='h-50 py-3'

@@ -7,6 +7,8 @@ import LocalStorage from '../../localStorage';
 import PowerIcon from '@mui/icons-material/Power';
 import SendIcon from '@mui/icons-material/Send';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import HttpsIcon from '@mui/icons-material/Https';
+import WifiIcon from '@mui/icons-material/Wifi';
 import CloseIcon from '@mui/icons-material/Close';
 import Connection from '../Connection';
 
@@ -92,9 +94,6 @@ export default function History({ histories, onLoad, onClear }) {
                                     sx={{ minWidth: 275 }}
                                 >
                                     <CardContent>
-                                        {/* <Typography variant='body2' fontFamily='SFProText-Regular' color="text.secondary" gutterBottom>
-                                            At {new Date(history.timestamp_in_unix * 1000).toISOString().split('T')[0]}
-                                        </Typography> */}
                                         <Box
                                             display='flex'
                                             marginBottom={3}
@@ -112,9 +111,21 @@ export default function History({ histories, onLoad, onClear }) {
                                                 <Typography>
                                                     {history.url}
                                                 </Typography>
-                                                <Typography variant='caption' color='text.secondary' fontFamily='SFProText-Regular'>
-                                                    Average RTT: {history.avg_rtt}ms
-                                                </Typography>
+                                                <Stack direction='row' justifyContent='space-between'>
+                                                    <Typography variant='caption' color='text.secondary' fontFamily='SFProText-Regular'>
+                                                        Average RTT: {history.avg_rtt}ms
+                                                    </Typography>
+                                                    <Stack direction='row' spacing={1}>
+                                                        <HttpsIcon
+                                                            fontSize='small'
+                                                            color={history.url.startsWith('https') || history.url.startsWith('wss') ? 'success' : 'error'}
+                                                        />
+                                                        <WifiIcon
+                                                            fontSize='small'
+                                                            color={history.avg_rtt <= 100 ? 'success' : history.avg_rtt > 100 && history.avg_rtt <= 350 ? 'warning' : 'error'}
+                                                        />
+                                                    </Stack>
+                                                </Stack>
                                                 <Box>
                                                     <Chip
                                                         label={`${history.listeners.length} ${history.listeners.length > 1 ? 'listeners' : 'listener'}`}
@@ -138,7 +149,7 @@ export default function History({ histories, onLoad, onClear }) {
                                                     <PowerIcon />
                                                 </IconButton>
                                             </Tooltip>
-                                            <Tooltip
+                                            {/* <Tooltip
                                                 title='Share'
                                             >
                                                 <IconButton
@@ -149,7 +160,7 @@ export default function History({ histories, onLoad, onClear }) {
                                                 >
                                                     <SendIcon />
                                                 </IconButton>
-                                            </Tooltip>
+                                            </Tooltip> */}
                                             <Tooltip
                                                 title='Preview'
                                             >
