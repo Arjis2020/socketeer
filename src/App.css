@@ -8,6 +8,10 @@
   height: 50vh !important;
 }
 
+.mt-10{
+  margin-top: 70px !important;
+}
+
 @font-face {
   font-family: 'SFProText-Regular';
   src: local('Lato'), url(./fonts/SFProText-Regular.ttf) format('truetype');

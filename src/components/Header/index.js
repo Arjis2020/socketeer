@@ -16,7 +16,7 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
     };
 
     return (
-        <AppBar position='static'>
+        <AppBar position='fixed'>
             <Container maxWidth='xl'>
                 <Toolbar disableGutters className='justify-content-between'>
                     <img src='/socketeer.png' style={{
@@ -26,7 +26,7 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                         <Tab icon={<PowerIcon />} aria-label="connect" /*label='Connect'*/ />
                         <Tab icon={<WifiIcon />} aria-label="emit" /*label='Emit'*/ />
                         <Tab icon={<HistoryIcon />} aria-label="history" /*label='Favorites'*/ />
-                        <Tab icon={<ShowChartIcon />} aria-label="metrics" /*label='Metrics'*/ />
+                        {/* <Tab icon={<ShowChartIcon />} aria-label="metrics" label='Metrics' /> */}
                     </Tabs>
                     <Button
                         variant='contained'

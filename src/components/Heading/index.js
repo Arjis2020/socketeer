@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Stack, Typography } from '@mui/material'
+import { Avatar, Button, Divider, Stack, Typography, Tooltip, IconButton } from '@mui/material'
 import { pink, yellow } from '@mui/material/colors'
 import React from 'react'
 import './heading.css'
@@ -20,7 +20,7 @@ export default function Heading({ heading, body, href, icon, button, buttonText,
                         </Typography>}
                     </Stack>
                 </Stack>
-                {button &&
+                {/*button &&
                     <Button
                         startIcon={buttonIcon}
                         size='medium'
@@ -33,6 +33,18 @@ export default function Heading({ heading, body, href, icon, button, buttonText,
                     >
                         {buttonText}
                     </Button>
+                */}
+                {button &&
+                    <Tooltip
+                        title={buttonText}
+                    >
+                        <IconButton
+                            color='primary'
+                            onClick={onClick}
+                        >
+                            {buttonIcon}
+                        </IconButton>
+                    </Tooltip>
                 }
             </Stack>
             <Divider />

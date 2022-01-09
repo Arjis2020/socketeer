@@ -19,6 +19,7 @@ import History from './components/History';
 import LocalStorage from './localStorage'
 import keys from './localStorage.keys.json'
 import Donation from './components/Donation';
+import Metrics from './components/Metrics';
 
 const theme = createTheme({
   palette: {
@@ -67,40 +68,6 @@ function App() {
   const onDonationClosed = () => {
     setDonation(false)
   }
-
-  useEffect(() => {
-    let interval
-    if (connection.status === 'connected') {
-      interval = setInterval(() => {
-        Pinger(connection.data.url,
-          (ping_in_ms) => {
-            pingHistory.push(ping_in_ms)
-          },
-          (err) => {
-            console.log("ERR", err.toString())
-            setSnackbar({
-              open: true,
-              component:
-                <Alert onClose={handleAlertClose} severity="error" sx={{ width: '100%' }}>
-                  {err.toString()}
-                </Alert>
-            })
-          }
-        )
-      }, 5000)
-    }
-    else {
-      if (interval) {
-        clearInterval(interval)
-      }
-    }
-  }, [connection])
-
-  useEffect(() => {
-    setTimeout(() => {
-
-    }, 0)
-  }, [])
 
   const handleAlertClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -339,7 +306,7 @@ function App() {
       />
       <Container
         maxWidth='xl'
-        className='h-50 py-3'
+        className='h-50 py-3 mt-10'
       >
         {tabIndex === 0 &&
           <Connection
@@ -365,6 +332,20 @@ function App() {
             onClear={onClear}
             onLoad={onLoad}
           />
+        }
+        {/*tabIndex === 3 &&
+          <Metrics
+            url={connection.data.url}
+            onError={(err) => {
+              setSnackbar({
+                open: true,
+                component:
+                  <Alert onClose={handleAlertClose} severity="error" sx={{ width: '100%' }}>
+                    {err.toString()}
+                  </Alert>
+              })
+            }}
+          />*/
         }
       </Container>
       {
