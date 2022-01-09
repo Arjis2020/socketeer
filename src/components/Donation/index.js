@@ -14,12 +14,12 @@ export default function Donation({ open, onClose }) {
             if (packageJSON.env === 'dev') {
                 Script.setAttribute('data-payment_button_id', 'pl_IhXadRZ8SXrS78')
             }
-            else{
+            else {
                 Script.setAttribute('data-payment_button_id', 'pl_IhZDYCEDji7UFI')
             }
             Form?.appendChild(Script);
             Script.onload = function () {
-                const progress = document.getElementById('progressBar')
+                const progress = document.getElementById('progress')
                 progress.remove()
             }
         }
@@ -76,7 +76,7 @@ export default function Donation({ open, onClose }) {
                             <CircularProgress
                                 variant='indeterminate'
                                 color='primary'
-                                id='progressBar'
+                                id='progress'
                                 size={20}
                             />
                         </form>

@@ -304,7 +304,7 @@ function App() {
         activeTab={tabIndex}
         onDonateClicked={handleDonationDialog}
       />
-      <Container
+      {/* <Container
         maxWidth='xl'
         className='h-50 py-3 mt-10'
       >
@@ -333,6 +333,7 @@ function App() {
             onLoad={onLoad}
           />
         }
+      </Container>
         {/*tabIndex === 3 &&
           <Metrics
             url={connection.data.url}
@@ -347,7 +348,6 @@ function App() {
             }}
           />*/
         }
-      </Container>
       {
         tabIndex < 2 &&
         <Server messages={messages} />
