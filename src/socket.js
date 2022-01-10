@@ -33,6 +33,7 @@ function init(url = '', options = {}, onConnect = () => { }, onFailure = () => {
             LocalStorage.set(
                 [keys.histories, JSON.stringify(histories)]
             )
+            LocalStorage.setCurrent(histories[histories.length - 1].id)
             onConnect({ id: socket.id, url, options, listeners: [{ name: 'connect', removable: false }] })
         }, null)
     })
@@ -50,10 +51,12 @@ let listeners = []
 function addListener(key = '', onMessageReceived = () => { }) {
     if (socket) {
         listeners.push(key)
+        console.log(listeners)
 
         //local storage updation
         let history = LocalStorage.query((history) => history.id === LocalStorage.getCurrent())
         history.listeners = listeners
+        console.log(history)
         let histories = JSON.parse(LocalStorage.get(keys.histories))
         histories = histories.filter(item => item.id !== history.id)
         histories.push(history)

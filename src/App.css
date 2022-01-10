@@ -8,8 +8,12 @@
   height: 50vh !important;
 }
 
-.mt-10{
+.mt-70{
   margin-top: 70px !important;
+}
+
+.mb-10{
+  margin-top: 10px !important;
 }
 
 @font-face {

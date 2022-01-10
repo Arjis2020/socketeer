@@ -68,7 +68,6 @@ export default function History({ histories, onLoad, onClear }) {
     return (
         <Box
             sx={{ mb: 5 }}
-            display='inline-block'
         >
             <Preview />
             <Heading
@@ -89,6 +88,9 @@ export default function History({ histories, onLoad, onClear }) {
                         return (
                             <Grid
                                 item
+                                xs={12}
+                                md={4}
+                                key={history.id}
                             >
                                 <Card
                                     sx={{ minWidth: 275 }}
@@ -106,7 +108,7 @@ export default function History({ histories, onLoad, onClear }) {
                                             />
                                             <Box
                                                 display='inline-block'
-                                                sx={{ ml: 0.5 }}
+                                                sx={{ ml: 0.5, width: 1 }}
                                             >
                                                 <Typography>
                                                     {history.url}

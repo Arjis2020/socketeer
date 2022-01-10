@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Heading from '../../../../../Heading';
 import HearingIcon from '@mui/icons-material/Hearing';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { Cancel } from '@mui/icons-material';
 
 export default function AddListener({ open, onClose, onAdd }) {
 
@@ -27,9 +28,18 @@ export default function AddListener({ open, onClose, onAdd }) {
                 p: 3,
             }}>
                 <Stack spacing={2} direction='column'>
-                    <Heading heading='Add Listener' icon={<HearingIcon />} body='Add a new listener parameter' sx={{
-                        marginBottom: -2,
-                    }} />
+                    <Heading
+                        heading='Add Listener'
+                        icon={<HearingIcon />}
+                        body='Add a new listener parameter'
+                        button
+                        buttonIcon={<Cancel />}
+                        buttonText='Close'
+                        onClick={onClose}
+                        sx={{
+                            marginBottom: -2
+                        }}
+                        />
                     <TextField
                         type='text'
                         label='Listener'
@@ -39,28 +49,17 @@ export default function AddListener({ open, onClose, onAdd }) {
                         placeholder='Ex: join-room'
                         onChange={handleListenerChange}
                     />
-                    <Stack direction='row' spacing={1}>
-                        <Button
-                            variant='contained'
-                            startIcon={<CancelIcon />}
-                            color='error'
-                            fullWidth
-                            onClick={onClose}
-                        >
-                            Cancel
-                        </Button>
-                        <Button
-                            variant='contained'
-                            startIcon={<AddIcon />}
-                            fullWidth
-                            onClick={() => {
-                                onAdd(listener)
-                                onClose()
-                            }}
-                        >
-                            Add listener
-                        </Button>
-                    </Stack>
+                    <Button
+                        variant='contained'
+                        startIcon={<AddIcon />}
+                        fullWidth
+                        onClick={() => {
+                            onAdd(listener)
+                            onClose()
+                        }}
+                    >
+                        Add listener
+                    </Button>
                 </Stack>
             </Container>
         </Modal>

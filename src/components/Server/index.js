@@ -8,14 +8,21 @@ import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 export default function Server({ messages }) {
     const [expanded, setExpanded] = useState(null)
     return (
-        <Container maxWidth='xl'>
+        <Container
+            maxWidth='xl'
+            sx={{
+                mb: 7
+            }}
+        >
             <Heading heading={'Server messages'} body={'View what the server is responding'} icon={<CloudIcon />} button buttonText='Collapse all' buttonIcon={<CloseFullscreenIcon />} onClick={() => {
                 setExpanded(null)
             }} />
             {messages.length ?
                 messages.map((message, index) => {
                     return (
-                        <Accordion expanded={index === expanded}>
+                        <Accordion expanded={index === expanded}
+                            key={index}
+                        >
                             <AccordionSummary
                                 onClick={() => {
                                     setExpanded(expanded === null ? index : null)

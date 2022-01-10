@@ -20,6 +20,7 @@ import LocalStorage from './localStorage'
 import keys from './localStorage.keys.json'
 import Donation from './components/Donation';
 import Metrics from './components/Metrics';
+import HistoryWarnModal from './components/HistoryWarnModal';
 
 const theme = createTheme({
   palette: {
@@ -58,8 +59,12 @@ function App() {
   })
   const [donation, setDonation] = useState(false)
   const [esc, setEsc] = useState(null)
+  const [historyWarnModal, setHistoryWarnModal] = useState({
+    open: false,
+    history: {}
+  })
   //const [pingHistory, setPingHistory] = useState([])
-  let pingHistory = []
+  //let pingHistory = []
 
   const handleDonationDialog = () => {
     setDonation(true)
@@ -261,13 +266,21 @@ function App() {
   const onLoad = (id) => {
     LocalStorage.setCurrent(id)
     let history = LocalStorage.query((history) => history.id === id)
-    onConnect(history.url, history.options)
-    setTabIndex(0)
-    setEsc({
-      url: history.url.split('//')[1],
-      protocol: history.url.split(':')[0],
-      options: JSON.stringify(JSON.parse(replacer(history.options)), undefined, 4)
-    })
+    if (connection.status === 'disconnected') {
+      onConnect(history.url, history.options)
+      setTabIndex(0)
+      setEsc({
+        url: history.url.split('//')[1],
+        protocol: history.url.split(':')[0],
+        options: JSON.stringify(JSON.parse(replacer(history.options)), undefined, 4)
+      })
+    }
+    else {
+      setHistoryWarnModal({
+        open: true,
+        history
+      })
+    }
   }
 
   const handleTabChanged = (index) => {
@@ -299,14 +312,28 @@ function App() {
         open={donation}
         onClose={onDonationClosed}
       />
+      <HistoryWarnModal
+        onPositiveButtonPressed={(url, options, history) => {
+          onConnect(url, options)
+          setTabIndex(0)
+          setEsc({
+            url: history.url.split('//')[1],
+            protocol: history.url.split(':')[0],
+            options: JSON.stringify(JSON.parse(replacer(history.options)), undefined, 4)
+          })
+        }}
+        history={historyWarnModal.history}
+        open={historyWarnModal.open}
+        onNegativeButtonPressed={() => setHistoryWarnModal({ open: false })}
+      />
       <Header
         onTabChanged={handleTabChanged}
         activeTab={tabIndex}
         onDonateClicked={handleDonationDialog}
       />
-      {/* <Container
+      <Container
         maxWidth='xl'
-        className='h-50 py-3 mt-10'
+        className='py-3 mt-70'
       >
         {tabIndex === 0 &&
           <Connection
@@ -328,29 +355,31 @@ function App() {
         }
         {tabIndex === 2 &&
           <History
-            histories={JSON.parse(LocalStorage.get(keys.histories))}
+            histories={JSON.parse(LocalStorage.get(keys.histories))?.sort((a, b) => b.timestamp_in_unix - a.timestamp_in_unix) || null}
             onClear={onClear}
             onLoad={onLoad}
           />
         }
       </Container>
-        {/*tabIndex === 3 &&
+      {/*tabIndex === 3 &&
           <Metrics
-            url={connection.data.url}
-            onError={(err) => {
-              setSnackbar({
-                open: true,
-                component:
-                  <Alert onClose={handleAlertClose} severity="error" sx={{ width: '100%' }}>
-                    {err.toString()}
-                  </Alert>
-              })
-            }}
+          url={connection.data.url}
+          onError={(err) => {
+            setSnackbar({
+              open: true,
+              component:
+              <Alert onClose={handleAlertClose} severity="error" sx={{ width: '100%' }}>
+              {err.toString()}
+              </Alert>
+            })
+          }}
           />*/
-        }
+      }
       {
         tabIndex < 2 &&
-        <Server messages={messages} />
+        <Server
+          messages={messages}
+        />
       }
       <Status status={connection.status} data={connection.data} />
       <Footer />

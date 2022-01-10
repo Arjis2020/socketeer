@@ -29,7 +29,9 @@ export default function Listeners({ listeners, onAddListener, status, onRemoveLi
                 {listeners.length ?
                     listeners.map(listener => {
                         return (
-                            <Paper className={`p-2 mb-2 ${!listener.removable && 'dim disabled'}`}>
+                            <Paper className={`p-2 mb-2 ${!listener.removable && 'dim disabled'}`}
+                                key={listener.name}
+                            >
                                 <Stack direction='row' justifyContent='space-between'>
                                     <Stack
                                         spacing={2}

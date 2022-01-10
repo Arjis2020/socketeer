@@ -9,6 +9,7 @@ import ShowChartIcon from '@mui/icons-material/ShowChart';
 import HistoryIcon from '@mui/icons-material/History';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Container, Toolbar, Typography, Button, Avatar, Box, Tooltip, IconButton, Menu, SwipeableDrawer, List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
+import { yellow } from '@mui/material/colors';
 
 export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -88,14 +89,22 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                                     onClick={() => handleChange(null, index)}
                                 >
                                     <ListItemIcon>
-                                        {index === 0 ?
-                                            <PowerIcon />
-                                            :
-                                            index === 1 ?
-                                                <WifiIcon />
+                                        <Avatar
+                                            sx={{
+                                                bgcolor: yellow[600],
+                                                height: 32,
+                                                width: 32
+                                            }}                                            
+                                        >
+                                            {index === 0 ?
+                                                <PowerIcon fontSize='small'/>
                                                 :
-                                                <HistoryIcon />
-                                        }
+                                                index === 1 ?
+                                                    <WifiIcon fontSize='small'/>
+                                                    :
+                                                    <HistoryIcon fontSize='small'/>
+                                            }
+                                        </Avatar>
                                     </ListItemIcon>
                                     <ListItemText primary={text} />
                                 </ListItem>
@@ -110,45 +119,10 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                         onClick={onDonateClicked}
                         color='primary'
                     >
-                        <FavoriteIcon />
+                        <FavoriteIcon fontSize='medium' />
                     </IconButton>
                 </Tooltip>
             </Box >
-        )
-    }
-
-    const MD = () => {
-        return (
-            <Box sx={{
-                flexGrow: 1,
-                display: {
-                    xs: 'none',
-                    md: 'flex'
-                },
-                alignItems: 'center',
-                justifyContent: 'space-between'
-            }}>
-                <img src='/socketeer.png' style={{
-                    height: 24,
-                }} />
-                <Tabs
-                    value={activeTab}
-                    onChange={handleChange}
-                    aria-label="tabs"
-                    centered
-                >
-                    <Tab icon={<PowerIcon />} aria-label="connect" />
-                    <Tab icon={<WifiIcon />} aria-label="emit" />
-                    <Tab icon={<HistoryIcon />} aria-label="history" />
-                </Tabs>
-                <Button
-                    variant='contained'
-                    endIcon={<FavoriteIcon />}
-                    onClick={onDonateClicked}
-                >
-                    Donate
-                </Button>
-            </Box>
         )
     }
 
@@ -158,23 +132,37 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                 <Toolbar
                     disableGutters
                 >
-                    {/* <img src='/socketeer.png' style={{
-                        height: 24,
-                    }} />
-                    <Tabs value={activeTab} onChange={handleChange} aria-label="tabs" centered>
-                        <Tab icon={<PowerIcon />} aria-label="connect" />
-                        <Tab icon={<WifiIcon />} aria-label="emit" />
-                        <Tab icon={<HistoryIcon />} aria-label="history" />
-                    </Tabs>
-                    <Button
-                        variant='contained'
-                        endIcon={<FavoriteIcon />}
-                        onClick={onDonateClicked}
-                    >
-                        Donate
-                    </Button> */}
                     <XS />
-                    <MD />
+                    <Box sx={{
+                        flexGrow: 1,
+                        display: {
+                            xs: 'none',
+                            md: 'flex'
+                        },
+                        alignItems: 'center',
+                        justifyContent: 'space-between'
+                    }}>
+                        <img src='/socketeer.png' style={{
+                            height: 24,
+                        }} />
+                        <Tabs
+                            value={activeTab}
+                            onChange={handleChange}
+                            aria-label="tabs"
+                            centered
+                        >
+                            <Tab icon={<PowerIcon />} aria-label="connect" />
+                            <Tab icon={<WifiIcon />} aria-label="emit" />
+                            <Tab icon={<HistoryIcon />} aria-label="history" />
+                        </Tabs>
+                        <Button
+                            variant='contained'
+                            endIcon={<FavoriteIcon />}
+                            onClick={onDonateClicked}
+                        >
+                            Donate
+                        </Button>
+                    </Box>
                 </Toolbar>
             </Container>
         </AppBar>
