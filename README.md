@@ -4,12 +4,12 @@
 Let's see what is left
 
 - [x] Make Appbar responsive
-- [ ] Make Status bar responsive
-- [ ] Make Connection responsive
-- [ ] Make Emission responsive
-- [ ] Make History responsive
-- [ ] Make all Modals responsive
-- [ ] Make sure Donations work in production
+- [x] Make Status bar responsive
+- [x] Make Connection responsive
+- [x] Make Emission responsive
+- [x] Make History responsive
+- [x] Make all Modals responsive
+- [x] Make sure Donations work in production
 
 Later:
 

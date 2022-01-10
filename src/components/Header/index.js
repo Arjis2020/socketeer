@@ -4,8 +4,6 @@ import Tab from '@mui/material/Tab';
 import PowerIcon from '@mui/icons-material/Power';
 import WifiIcon from '@mui/icons-material/Wifi';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
-import ShowChartIcon from '@mui/icons-material/ShowChart';
 import HistoryIcon from '@mui/icons-material/History';
 import MenuIcon from '@mui/icons-material/Menu';
 import { AppBar, Container, Toolbar, Typography, Button, Avatar, Box, Tooltip, IconButton, Menu, SwipeableDrawer, List, ListItem, ListItemIcon, ListItemText, Divider, Stack } from '@mui/material';
@@ -57,9 +55,20 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                 >
                     <MenuIcon />
                 </IconButton>
-                <img src='/socketeer-small.png' style={{
-                    height: 28,
-                }} />
+                <Tooltip
+                    title='Socketeer'
+                >
+                    <IconButton
+                        href='/'
+                        target='_blank'
+                        rel='noreferrer noopener'
+                        sx={{ "&:hover": { backgroundColor: "transparent" } }}
+                    >
+                        <img src='/socketeer-small.png' style={{
+                            height: 28,
+                        }} />
+                    </IconButton>
+                </Tooltip>
                 {/* <Tabs value={activeTab} onChange={handleChange} aria-label="tabs" centered>
                     <Tab icon={<PowerIcon fontSize='small' />} aria-label="connect" />
                     <Tab icon={<WifiIcon fontSize='small' />} aria-label="emit" />
@@ -118,7 +127,7 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                         title='Github'
                     >
                         <IconButton
-                            href='https://github.com/Arjis2020'
+                            href='https://github.com/Arjis2020/socketeer'
                             color='primary'
                             target='_blank'
                             rel='noreferrer noopenner'
@@ -158,9 +167,20 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                         alignItems: 'center',
                         justifyContent: 'space-between'
                     }}>
-                        <img src='/socketeer.png' style={{
-                            height: 24,
-                        }} />
+                        <Tooltip
+                            title='Socketeer'
+                        >
+                            <IconButton
+                                href='/'
+                                target='_blank'
+                                rel='noreferrer noopener'
+                                sx={{ "&:hover": { backgroundColor: "transparent" } }}
+                            >
+                                <img src='/socketeer.png' style={{
+                                    height: 24,
+                                }} />
+                            </IconButton>
+                        </Tooltip>
                         <Tabs
                             value={activeTab}
                             onChange={handleChange}
@@ -175,7 +195,7 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                             <Button
                                 variant='contained'
                                 endIcon={<GitHub />}
-                                href='https://github.com/Arjis2020'
+                                href='https://github.com/Arjis2020/socketeer'
                                 target='_blank'
                                 rel='noreferrer noopenner'
                                 className='button'
