@@ -382,7 +382,7 @@ function App() {
         />
       }
       <Status status={connection.status} data={connection.data} />
-      <Footer />
+      {/* <Footer /> */}
     </ThemeProvider>
   )
 }

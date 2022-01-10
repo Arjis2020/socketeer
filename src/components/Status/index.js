@@ -62,7 +62,7 @@ export default function Status({ status, data }) {
     )
 
     return (
-        <div className={`status-container fixed-bottom ${status} p-1`}>
+        <div className={`fixed-bottom status-container ${status} p-1`}>
             <Container maxWidth='xl'>
                 <XS />
                 <MD />

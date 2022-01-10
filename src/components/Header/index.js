@@ -8,8 +8,9 @@ import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import HistoryIcon from '@mui/icons-material/History';
 import MenuIcon from '@mui/icons-material/Menu';
-import { AppBar, Container, Toolbar, Typography, Button, Avatar, Box, Tooltip, IconButton, Menu, SwipeableDrawer, List, ListItem, ListItemIcon, ListItemText, Divider } from '@mui/material';
+import { AppBar, Container, Toolbar, Typography, Button, Avatar, Box, Tooltip, IconButton, Menu, SwipeableDrawer, List, ListItem, ListItemIcon, ListItemText, Divider, Stack } from '@mui/material';
 import { yellow } from '@mui/material/colors';
+import { GitHub } from '@mui/icons-material';
 
 export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
     const [openDrawer, setOpenDrawer] = useState(false)
@@ -94,15 +95,15 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                                                 bgcolor: yellow[600],
                                                 height: 32,
                                                 width: 32
-                                            }}                                            
+                                            }}
                                         >
                                             {index === 0 ?
-                                                <PowerIcon fontSize='small'/>
+                                                <PowerIcon fontSize='small' />
                                                 :
                                                 index === 1 ?
-                                                    <WifiIcon fontSize='small'/>
+                                                    <WifiIcon fontSize='small' />
                                                     :
-                                                    <HistoryIcon fontSize='small'/>
+                                                    <HistoryIcon fontSize='small' />
                                             }
                                         </Avatar>
                                     </ListItemIcon>
@@ -112,17 +113,32 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                         </List>
                     </Box>
                 </SwipeableDrawer >
-                <Tooltip
-                    title='Donate'
-                >
-                    <IconButton
-                        onClick={onDonateClicked}
-                        color='primary'
+                <Stack direction='row' spacing={1}>
+                    <Tooltip
+                        title='Github'
                     >
-                        <FavoriteIcon fontSize='medium' />
-                    </IconButton>
-                </Tooltip>
-            </Box >
+                        <IconButton
+                            href='https://github.com/Arjis2020'
+                            color='primary'
+                            target='_blank'
+                            rel='noreferrer noopenner'
+                            className='button'
+                        >
+                            <GitHub fontSize='medium' />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip
+                        title='Donate'
+                    >
+                        <IconButton
+                            onClick={onDonateClicked}
+                            color='primary'
+                        >
+                            <FavoriteIcon fontSize='medium' />
+                        </IconButton>
+                    </Tooltip>
+                </Stack>
+            </Box>
         )
     }
 
@@ -155,13 +171,25 @@ export default function Header({ onTabChanged, activeTab, onDonateClicked }) {
                             <Tab icon={<WifiIcon />} aria-label="emit" />
                             <Tab icon={<HistoryIcon />} aria-label="history" />
                         </Tabs>
-                        <Button
-                            variant='contained'
-                            endIcon={<FavoriteIcon />}
-                            onClick={onDonateClicked}
-                        >
-                            Donate
-                        </Button>
+                        <Stack direction='row' spacing={1}>
+                            <Button
+                                variant='contained'
+                                endIcon={<GitHub />}
+                                href='https://github.com/Arjis2020'
+                                target='_blank'
+                                rel='noreferrer noopenner'
+                                className='button'
+                            >
+                                Github
+                            </Button>
+                            <Button
+                                variant='contained'
+                                endIcon={<FavoriteIcon />}
+                                onClick={onDonateClicked}
+                            >
+                                Donate
+                            </Button>
+                        </Stack>
                     </Box>
                 </Toolbar>
             </Container>
