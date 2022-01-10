@@ -1,11 +1,11 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Container, Stack, Typography, Chip, Box, Divider, IconButton, Tooltip, Grid, Modal } from '@mui/material'
+import { Button, Card, CardActions, CardContent, CardMedia, Container, Stack, Typography, Chip, Box, Divider, /* IconButton, Tooltip, */ Grid, Modal } from '@mui/material'
 import React, { useState } from 'react'
 import Heading from '../Heading'
 import HistoryIcon from '@mui/icons-material/History';
 import DeleteIcon from '@mui/icons-material/Delete';
-import LocalStorage from '../../localStorage';
+/* import LocalStorage from '../../localStorage';
 import PowerIcon from '@mui/icons-material/Power';
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from '@mui/icons-material/Send'; */
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import HttpsIcon from '@mui/icons-material/Https';
 import WifiIcon from '@mui/icons-material/Wifi';
@@ -31,7 +31,7 @@ export default function History({ histories, onLoad, onClear }) {
                 open={modal.open}
                 onClose={onClose}
             >
-                <Container maxWidth='xl' sx={{
+                <Container maxWidth='xs' sx={{
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
@@ -139,7 +139,7 @@ export default function History({ histories, onLoad, onClear }) {
                                         <CardActions
                                             sx={{ pl: 0, mt: 0.8 }}
                                         >
-                                            <Tooltip
+                                            {/* <Tooltip
                                                 title='Connect'
                                             >
                                                 <IconButton
@@ -150,7 +150,12 @@ export default function History({ histories, onLoad, onClear }) {
                                                 >
                                                     <PowerIcon />
                                                 </IconButton>
-                                            </Tooltip>
+                                            </Tooltip> */}
+                                            <Button
+                                                onClick={() => onLoad(history.id)}
+                                            >
+                                                Connect
+                                            </Button>
                                             {/* <Tooltip
                                                 title='Share'
                                             >
@@ -163,7 +168,7 @@ export default function History({ histories, onLoad, onClear }) {
                                                     <SendIcon />
                                                 </IconButton>
                                             </Tooltip> */}
-                                            <Tooltip
+                                            {/* <Tooltip
                                                 title='Preview'
                                             >
                                                 <IconButton
@@ -177,7 +182,7 @@ export default function History({ histories, onLoad, onClear }) {
                                                 >
                                                     <VisibilityIcon />
                                                 </IconButton>
-                                            </Tooltip>
+                                            </Tooltip> */}
                                         </CardActions>
                                     </CardContent>
                                 </Card>
